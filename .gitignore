@@ -1,0 +1,23 @@
+# Dependencies — hamesha `npm install` se dobara banegi, repo me mat dalo
+node_modules/
+
+# Production build — `npm run build` se banta hai, deploy me CLI khud upload karta hai
+dist/
+
+# Secrets — API keys kabhi GitHub par mat dalo (local me `.env.example` dekhkar banao)
+.env
+.env.local
+.env.*.local
+
+# Firebase local cache & logs
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+*.log
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

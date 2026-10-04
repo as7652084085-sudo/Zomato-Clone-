@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  function isSignedIn() {
+    return request.auth != null;
+  }
+  // Admin: sirf ye email poore orders par read+update kar sakta hai
+  function isAdmin() {
+    return isSignedIn() && request.auth.token.email == 'as7652084085@gmail.com';
+  }
+  match /databases/{database}/documents {
+    // Restaurants: sab padh sakte hain, likhna sirf logged-in (admin ko IAM se restrict karo)
+    match /restaurants/{id} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+    // Orders: customer apna order banaye/padhe; admin sab dekhe + status update kare
+    match /orders/{id} {
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+  }
+}
